@@ -23,7 +23,6 @@ section[id] {
 
 body {
   margin: 0;
-  min-width: 320px;
   background: var(--warm-white);
   color: var(--navy);
   font-family: var(--font-manrope), sans-serif;
