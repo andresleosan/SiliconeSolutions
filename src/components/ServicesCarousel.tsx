@@ -198,13 +198,14 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
                 transition={{ duration: 0.55, delay: index * 0.06, ease: "easeOut" }}
                 whileHover={motionDisabled ? undefined : { y: -8 }}
               >
-                <div className="relative aspect-[16/10] overflow-hidden bg-[var(--stone)]">
+                <div className="relative overflow-hidden bg-[var(--stone)]">
                   <Image
                     src={service.image}
                     alt={service.imageAlt}
-                    fill
+                    width={service.width}
+                    height={service.height}
                     sizes="(max-width: 639px) calc(100vw - 3.5rem), (max-width: 1279px) 31rem, 35rem"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="h-auto w-full"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--navy)]/80 via-[var(--navy)]/10 to-transparent" aria-hidden="true" />
                   <span className="absolute left-5 top-5 rounded-full border border-[var(--warm-white)]/30 bg-[var(--navy)]/60 px-3 py-1 text-[0.65rem] font-extrabold uppercase tracking-[0.14em] text-[var(--warm-white)]">

@@ -22,13 +22,14 @@ export function AboutSection({
     <section id="about" className="bg-[var(--navy)] py-20 text-[var(--warm-white)] sm:py-28" aria-labelledby="about-title">
       <div className="container grid items-center gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-20">
         <div className="relative overflow-hidden rounded-[1.75rem] border border-[var(--warm-white)]/15 bg-[var(--warm-white)]/5 p-2">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem]">
+          <div className="overflow-hidden rounded-[1.25rem]">
             <Image
               src={imageSrc}
               alt="Silicone Solutions finished washbasin sealing detail"
-              fill
+              width={1200}
+              height={1600}
               sizes="(max-width: 1023px) 100vw, 36vw"
-              className="object-cover"
+              className="h-auto w-full"
             />
           </div>
         </div>

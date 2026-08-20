@@ -3,16 +3,15 @@ import Image from "next/image";
 export function LogoMark() {
   return (
     <span className="logo-mark">
-      <span className="logo-mark__image">
-        <Image
-          src="/images/logo.jpg"
-          alt="Silicone Solutions C.I. Ltd"
-          fill
-          sizes="(max-width: 767px) 128px, 168px"
-          className="logo-mark__asset"
-          priority
-        />
-      </span>
+      <Image
+        src="/images/logo-clean.png"
+        alt="Silicone Solutions C.I. Ltd"
+        width={1284}
+        height={805}
+        sizes="(max-width: 767px) 128px, 168px"
+        className="h-auto w-full"
+        priority
+      />
     </span>
   );
 }

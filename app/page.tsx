@@ -18,7 +18,7 @@ export default function Home() {
         <Hero
           siteCopy={siteCopy.hero}
           videoSrc="/video/silicone-solutions.mp4"
-          posterSrc="/images/services.jpg"
+          posterSrc="/images/services.webp"
           phoneHref={phoneHref}
           quoteHref={whatsappHref}
         />
@@ -27,20 +27,20 @@ export default function Home() {
           problem={siteCopy.problem}
           solution={siteCopy.solution}
           processSteps={processSteps}
-          problemImage="/images/banera-antes.jpg"
-          resultImage="/images/banera.jpg"
+          problemImage="/images/banera-antes.webp"
+          resultImage="/images/banera.webp"
         />
         <AboutSection
           about={siteCopy.about}
           businessName={siteCopy.businessName}
           serviceArea={siteCopy.serviceArea}
-          imageSrc="/images/lavamanos.jpg"
+          imageSrc="/images/lavamanos.webp"
           phoneHref={phoneHref}
         />
         <ServicesCarousel services={services} />
         <BeforeAfterSlider
-          beforeSrc="/images/banera-antes.jpg"
-          afterSrc="/images/banera.jpg"
+          beforeSrc="/images/banera-antes.webp"
+          afterSrc="/images/banera.webp"
           beforeAlt="Bath edge showing an ageing silicone seal before specialist work"
           afterAlt="Bath edge showing a clean finished silicone seal"
         />

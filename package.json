@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "media:prepare": "node scripts/prepare-media.mjs",
+    "media:verify": "node scripts/verify-media.mjs"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +28,7 @@
     "@types/react-dom": "^19.2.4",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.1",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   }

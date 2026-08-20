@@ -43,17 +43,25 @@ export function Hero({
   useEffect(() => {
     const video = videoRef.current;
 
-    if (!video || shouldReduceMotion === null) {
+    if (!video) {
       return;
     }
 
-    if (shouldReduceMotion) {
-      video.pause();
-      return;
-    }
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncPlayback = () => {
+      if (motionPreference.matches) {
+        video.pause();
+        return;
+      }
 
-    void video.play().catch(() => undefined);
-  }, [shouldReduceMotion]);
+      void video.play().catch(() => undefined);
+    };
+
+    syncPlayback();
+    motionPreference.addEventListener("change", syncPlayback);
+
+    return () => motionPreference.removeEventListener("change", syncPlayback);
+  }, []);
 
   return (
     <section
@@ -113,10 +121,10 @@ export function Hero({
           variants={revealVariants}
           className="relative m-0 overflow-hidden rounded-[2rem] border border-[var(--warm-white)]/15 bg-[var(--warm-white)]/5 p-2 shadow-2xl shadow-black/25"
         >
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-black">
+          <div className="relative overflow-hidden rounded-[1.5rem] bg-black">
             <video
               ref={videoRef}
-              className="h-full w-full object-cover"
+              className="block h-auto w-full"
               src={videoSrc}
               poster={posterSrc}
               autoPlay

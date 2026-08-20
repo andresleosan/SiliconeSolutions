@@ -55,13 +55,14 @@ export function ProblemSection({
 
           <div className="grid gap-5 sm:grid-cols-2 sm:items-end">
             <figure className="m-0">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
+              <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
                 <Image
                   src={problemImage}
                   alt="Bath edge showing an existing silicone seal before specialist work"
-                  fill
+                  width={1200}
+                  height={1600}
                   sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 34vw"
-                  className="object-cover"
+                  className="h-auto w-full"
                 />
               </div>
               <figcaption className="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-[var(--navy)]/60">
@@ -69,13 +70,14 @@ export function ProblemSection({
               </figcaption>
             </figure>
             <figure className="m-0 sm:mb-10">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
+              <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
                 <Image
                   src={resultImage}
                   alt="Bath edge showing a clean finished silicone seal"
-                  fill
+                  width={1200}
+                  height={1600}
                   sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 34vw"
-                  className="object-cover"
+                  className="h-auto w-full"
                 />
               </div>
               <figcaption className="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-[var(--navy)]/60">

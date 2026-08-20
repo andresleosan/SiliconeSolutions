@@ -1,4 +1,9 @@
-export type Service = {
+type MediaDimensions = {
+  width: number;
+  height: number;
+};
+
+export type Service = MediaDimensions & {
   title: string;
   description: string;
   benefit: string;
@@ -14,7 +19,7 @@ export type Testimonial = {
   verified: boolean;
 };
 
-export type GalleryItem = {
+export type GalleryItem = MediaDimensions & {
   src: string;
   alt: string;
   label: string;
@@ -37,48 +42,60 @@ export const services: Service[] = [
     title: "Bathroom Silicone Sealing",
     description: "Clean silicone sealing around baths, sinks and shower areas.",
     benefit: "A precise, cleaner-looking finish for wet areas.",
-    image: "/images/services.jpg",
-    imageAlt: "Fresh silicone sealing around a modern bath and shower area",
+    image: "/images/services.webp",
+    imageAlt: "Silicone Solutions service overview flyer with contact and service information",
+    width: 947,
+    height: 2048,
     icon: "Bath",
   },
   {
     title: "Kitchen Silicone Sealing",
     description: "Neat sealing around worktops, sinks and splashback edges.",
     benefit: "A professional finish for the areas used every day.",
-    image: "/images/poceta.jpg",
-    imageAlt: "Clean silicone seal around a kitchen sink and worktop",
+    image: "/images/poceta.webp",
+    imageAlt: "Clean white silicone seal around the base of a toilet",
+    width: 1200,
+    height: 1600,
     icon: "CookingPot",
   },
   {
     title: "Shower Resealing",
     description: "Remove failed sealant and reseal shower trays, screens and joints.",
     benefit: "Restore a fresh, tidy appearance to your shower space.",
-    image: "/images/banera.jpg",
+    image: "/images/banera.webp",
     imageAlt: "Resealed bath edge with a clean silicone finish",
+    width: 1200,
+    height: 1600,
     icon: "ShowerHead",
   },
   {
     title: "Window Sealing",
     description: "Professional sealing for window frames and surrounding joints.",
     benefit: "A neat finish for domestic and commercial spaces.",
-    image: "/images/lavamanos.jpg",
-    imageAlt: "Neat silicone sealing detail around a washbasin",
+    image: "/images/lavamanos.webp",
+    imageAlt: "Clean white silicone seal between a washbasin and blue splashback",
+    width: 1200,
+    height: 1600,
     icon: "PanelTop",
   },
   {
     title: "Commercial Sealing",
     description: "Silicone sealing for commercial washrooms, kitchens and maintenance work.",
     benefit: "Specialist attention for busy property environments.",
-    image: "/images/services.jpg",
-    imageAlt: "Silicone sealing work prepared for a commercial washroom",
+    image: "/images/services.webp",
+    imageAlt: "Silicone Solutions service overview flyer with contact and service information",
+    width: 947,
+    height: 2048,
     icon: "Building2",
   },
   {
     title: "Sealant Replacement",
     description: "Careful removal of cracked or peeling sealant before a clean new bead.",
     benefit: "Refresh tired joints with a durable-looking finish.",
-    image: "/images/banera-antes.jpg",
+    image: "/images/banera-antes.webp",
     imageAlt: "Old sealant prepared for careful replacement around a bath",
+    width: 1200,
+    height: 1600,
     icon: "RefreshCw",
   },
 ];
@@ -162,19 +179,25 @@ export const testimonials: Testimonial[] = [
 
 export const galleryItems: GalleryItem[] = [
   {
-    src: "/images/services.jpg",
-    alt: "Silicone sealing work in a bathroom setting",
-    label: "Bathroom sealing",
+    src: "/images/services.webp",
+    alt: "Silicone Solutions service overview flyer with contact and service information",
+    label: "Services overview",
+    width: 947,
+    height: 2048,
   },
   {
-    src: "/images/poceta.jpg",
-    alt: "Finished silicone seal around a sink",
-    label: "Sink sealing",
+    src: "/images/poceta.webp",
+    alt: "Clean white silicone seal around the base of a toilet",
+    label: "Toilet base sealing",
+    width: 1200,
+    height: 1600,
   },
   {
-    src: "/images/lavamanos.jpg",
-    alt: "Clean sealant detail around a washbasin",
-    label: "Washbasin detail",
+    src: "/images/lavamanos.webp",
+    alt: "Clean white silicone seal between a washbasin and blue splashback",
+    label: "Washbasin sealing",
+    width: 1200,
+    height: 1600,
   },
 ];
 
