@@ -45,26 +45,20 @@ export function AboutSection({
           <p className="mt-7 max-w-2xl text-base leading-8 text-[var(--warm-white)]/72 sm:text-lg">{about.description}</p>
 
           <dl className="mt-9 grid gap-4 border-y border-[var(--warm-white)]/15 py-6 sm:grid-cols-3">
-            <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 shrink-0 text-[var(--orange)]" aria-hidden="true" size={19} strokeWidth={1.8} />
-              <div>
-                <dt className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)]/50">Coverage</dt>
-                <dd className="mt-1 text-sm font-bold text-[var(--warm-white)]">{serviceArea}</dd>
-              </div>
+            <div className="grid grid-cols-[auto_1fr] items-start gap-x-3">
+              <MapPin className="row-span-2 mt-0.5 shrink-0 text-[var(--orange)]" aria-hidden="true" size={19} strokeWidth={1.8} />
+              <dt className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)]/50">Coverage</dt>
+              <dd className="mt-1 text-sm font-bold text-[var(--warm-white)]">{serviceArea}</dd>
             </div>
-            <div className="flex items-start gap-3">
-              <Building2 className="mt-0.5 shrink-0 text-[var(--orange)]" aria-hidden="true" size={19} strokeWidth={1.8} />
-              <div>
-                <dt className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)]/50">Scope</dt>
-                <dd className="mt-1 text-sm font-bold text-[var(--warm-white)]">Domestic &amp; commercial</dd>
-              </div>
+            <div className="grid grid-cols-[auto_1fr] items-start gap-x-3">
+              <Building2 className="row-span-2 mt-0.5 shrink-0 text-[var(--orange)]" aria-hidden="true" size={19} strokeWidth={1.8} />
+              <dt className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)]/50">Scope</dt>
+              <dd className="mt-1 text-sm font-bold text-[var(--warm-white)]">Domestic &amp; commercial</dd>
             </div>
-            <div className="flex items-start gap-3">
-              <Timer className="mt-0.5 shrink-0 text-[var(--orange)]" aria-hidden="true" size={19} strokeWidth={1.8} />
-              <div>
-                <dt className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)]/50">Experience</dt>
-                <dd className="mt-1 text-sm font-bold text-[var(--warm-white)]">15+ years</dd>
-              </div>
+            <div className="grid grid-cols-[auto_1fr] items-start gap-x-3">
+              <Timer className="row-span-2 mt-0.5 shrink-0 text-[var(--orange)]" aria-hidden="true" size={19} strokeWidth={1.8} />
+              <dt className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)]/50">Experience</dt>
+              <dd className="mt-1 text-sm font-bold text-[var(--warm-white)]">15+ years</dd>
             </div>
           </dl>
 

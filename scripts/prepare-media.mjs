@@ -5,6 +5,11 @@ await sharp("public/images/logo.jpg")
   .png({ compressionLevel: 9 })
   .toFile("public/images/logo-clean.png");
 
+await sharp("public/images/logo-clean.png")
+  .resize({ width: 512, withoutEnlargement: true })
+  .webp({ quality: 82 })
+  .toFile("public/images/logo-clean.webp");
+
 const { data: iconRegion, info: iconInfo } = await sharp("public/images/logo.jpg")
   .extract({ left: 40, top: 280, width: 485, height: 490 })
   .ensureAlpha()

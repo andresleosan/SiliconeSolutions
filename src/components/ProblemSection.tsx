@@ -92,7 +92,12 @@ export function ProblemSection({
           <ol className="grid gap-0 sm:grid-cols-2">
             {processSteps.map((step) => (
               <li className="flex gap-4 border-b border-[var(--stone)] py-5 sm:nth-[n+3]:border-b-0" key={step.number}>
-                <span className="text-sm font-extrabold text-[var(--orange)]">{step.number}</span>
+                <span
+                  className="inline-flex h-7 min-w-7 shrink-0 items-center justify-center rounded-full bg-[var(--navy)] px-2 text-sm font-extrabold text-[var(--orange)]"
+                  aria-hidden="true"
+                >
+                  {step.number}
+                </span>
                 <div>
                   <h3 className="m-0 text-base font-extrabold tracking-[-0.03em] text-[var(--navy)]">{step.title}</h3>
                   <p className="mt-2 max-w-xs text-sm leading-6 text-[var(--navy)]/70">{step.description}</p>

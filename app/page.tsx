@@ -31,6 +31,7 @@ export default function Home() {
         <Hero
           siteCopy={siteCopy.hero}
           videoSrc="/video/silicone-solutions.mp4"
+          mobileVideoSrc="/video/silicone-solutions-mobile.mp4"
           posterSrc="/images/services.webp"
           phoneHref={phoneHref}
           quoteHref={whatsappHref}

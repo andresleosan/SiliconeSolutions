@@ -41,7 +41,7 @@ export function Footer({ phoneHref, whatsappHref, emailHref, serviceArea }: Foot
           <a
             className="break-all text-sm font-extrabold transition-colors hover:text-[var(--orange)]"
             href={emailHref}
-            aria-label="Email Silicone Solutions"
+            aria-label="Email Silicone Solutions: davidcameron481@yahoo.com"
           >
             davidcameron481@yahoo.com
           </a>

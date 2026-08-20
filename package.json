@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node qa/serve-static.mjs",
     "lint": "eslint .",
     "test:e2e": "next build && playwright test",
     "test:e2e:install": "playwright install chromium",
