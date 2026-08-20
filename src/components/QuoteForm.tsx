@@ -93,7 +93,7 @@ export function QuoteForm({
               <a
                 className="flex min-h-14 items-center gap-3 border-t border-[var(--warm-white)]/15 py-3 text-sm font-extrabold transition-colors hover:text-[var(--orange)]"
                 href={emailHref}
-                aria-label="Email Silicone Solutions"
+                aria-label="Email Silicone Solutions: davidcameron481@yahoo.com"
               >
                 <Mail aria-hidden="true" className="text-[var(--orange)]" size={19} strokeWidth={1.9} />
                 davidcameron481@yahoo.com

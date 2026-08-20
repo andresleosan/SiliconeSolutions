@@ -41,6 +41,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" as="image" href="/images/services.webp" fetchPriority="high" />
+        <style>{`
+          main > section:first-child > .container > div,
+          main > section:first-child > .container > figure {
+            opacity: 1 !important;
+            transform: none !important;
+          }
+
+          @media (max-width: 767px) {
+            main > section:first-child > .container > div:first-child {
+              display: flex;
+              min-height: calc(100svh - 11.5rem);
+              flex-direction: column;
+              justify-content: center;
+            }
+          }
+        `}</style>
+      </head>
       <body className={manrope.variable}>
         <script
           type="application/ld+json"

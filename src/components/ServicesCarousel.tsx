@@ -223,7 +223,7 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
 
                 <div className="flex flex-1 flex-col p-6 sm:p-7">
                   <div className="flex items-start justify-between gap-4">
-                    <div aria-label={`${service.icon} icon`} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--orange)] text-[var(--navy)]">
+                    <div aria-hidden="true" className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--orange)] text-[var(--navy)]">
                       <Icon aria-hidden="true" size={20} strokeWidth={2} />
                     </div>
                     <span className="pt-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--warm-white)]/50">{service.icon}</span>

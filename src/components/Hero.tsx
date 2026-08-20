@@ -13,6 +13,7 @@ type HeroCopy = {
 type HeroProps = {
   siteCopy: HeroCopy;
   videoSrc: string;
+  mobileVideoSrc: string;
   posterSrc: string;
   phoneHref: string;
   quoteHref: string;
@@ -32,6 +33,7 @@ function getRevealVariants(reducedMotion: boolean): Variants {
 export function Hero({
   siteCopy,
   videoSrc,
+  mobileVideoSrc,
   posterSrc,
   phoneHref,
   quoteHref,
@@ -48,20 +50,77 @@ export function Hero({
     }
 
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const syncPlayback = () => {
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    let idleHandle: number | undefined;
+    let cancelled = false;
+
+    const cancelScheduledLoad = () => {
+      if (idleHandle === undefined) {
+        return;
+      }
+
+      if (idleWindow.cancelIdleCallback) {
+        idleWindow.cancelIdleCallback(idleHandle);
+      } else {
+        window.clearTimeout(idleHandle);
+      }
+      idleHandle = undefined;
+    };
+
+    const loadVideo = () => {
+      idleHandle = undefined;
+      if (cancelled || motionPreference.matches) {
+        return;
+      }
+
+      video
+        .querySelector<HTMLSourceElement>('source[media="(max-width: 767px)"]')
+        ?.setAttribute("src", mobileVideoSrc);
+      video.querySelector<HTMLSourceElement>("source:not([media])")?.setAttribute("src", videoSrc);
+      video.load();
+      void video.play().catch(() => undefined);
+    };
+
+    const scheduleVideoLoad = () => {
+      if (cancelled || motionPreference.matches || idleHandle !== undefined) {
+        return;
+      }
+
+      idleHandle = idleWindow.requestIdleCallback
+        ? idleWindow.requestIdleCallback(loadVideo)
+        : window.setTimeout(loadVideo, 100);
+    };
+
+    const handleLoad = () => scheduleVideoLoad();
+    const handleMotionPreferenceChange = () => {
       if (motionPreference.matches) {
+        cancelScheduledLoad();
         video.pause();
         return;
       }
 
-      void video.play().catch(() => undefined);
+      scheduleVideoLoad();
     };
 
-    syncPlayback();
-    motionPreference.addEventListener("change", syncPlayback);
+    if (motionPreference.matches) {
+      video.pause();
+    } else if (document.readyState === "complete") {
+      scheduleVideoLoad();
+    } else {
+      window.addEventListener("load", handleLoad, { once: true });
+    }
+    motionPreference.addEventListener("change", handleMotionPreferenceChange);
 
-    return () => motionPreference.removeEventListener("change", syncPlayback);
-  }, []);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", handleLoad);
+      motionPreference.removeEventListener("change", handleMotionPreferenceChange);
+      cancelScheduledLoad();
+    };
+  }, [mobileVideoSrc, videoSrc]);
 
   return (
     <section
@@ -125,15 +184,17 @@ export function Hero({
             <video
               ref={videoRef}
               className="block h-auto w-full"
-              src={videoSrc}
               poster={posterSrc}
               autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="none"
               aria-label="Silicone sealing work video"
-            />
+            >
+              <source media="(max-width: 767px)" type="video/mp4" />
+              <source type="video/mp4" />
+            </video>
             <div
               className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--navy)]/60 via-transparent to-transparent"
               aria-hidden="true"
