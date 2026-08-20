@@ -32,42 +32,45 @@ export function BeforeAfterSlider({
         />
 
         <div data-comparison-root>
-          <div data-comparison-fallback className="mt-12 grid gap-6 sm:grid-cols-2">
-            <figure className="m-0">
-              <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
-                <Image
-                  src={afterSrc}
-                  alt={afterAlt}
-                  width={1200}
-                  height={1600}
-                  loading="lazy"
-                  sizes="(max-width: 639px) calc(100vw - 2rem), 39rem"
-                  className="h-auto w-full"
-                />
-              </div>
-              <figcaption className="mt-3 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--navy)]/60">
-                After
-              </figcaption>
-            </figure>
-            <figure className="m-0">
-              <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
-                <Image
-                  src={beforeSrc}
-                  alt={beforeAlt}
-                  width={1200}
-                  height={1600}
-                  loading="lazy"
-                  sizes="(max-width: 639px) calc(100vw - 2rem), 39rem"
-                  className="h-auto w-full"
-                />
-              </div>
-              <figcaption className="mt-3 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--navy)]/60">
-                Before
-              </figcaption>
-            </figure>
-          </div>
+          <noscript data-comparison-fallback>
+            <style>{`[data-comparison-enhanced] { display: none !important; }`}</style>
+            <div className="mt-12 grid gap-6 sm:grid-cols-2">
+              <figure className="m-0">
+                <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
+                  <Image
+                    src={afterSrc}
+                    alt={afterAlt}
+                    width={1200}
+                    height={1600}
+                    loading="lazy"
+                    sizes="(max-width: 639px) calc(100vw - 2rem), 39rem"
+                    className="h-auto w-full"
+                  />
+                </div>
+                <figcaption className="mt-3 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--navy)]/60">
+                  After
+                </figcaption>
+              </figure>
+              <figure className="m-0">
+                <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
+                  <Image
+                    src={beforeSrc}
+                    alt={beforeAlt}
+                    width={1200}
+                    height={1600}
+                    loading="lazy"
+                    sizes="(max-width: 639px) calc(100vw - 2rem), 39rem"
+                    className="h-auto w-full"
+                  />
+                </div>
+                <figcaption className="mt-3 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--navy)]/60">
+                  Before
+                </figcaption>
+              </figure>
+            </div>
+          </noscript>
 
-          <div data-comparison-enhanced hidden className="mt-12" suppressHydrationWarning>
+          <div data-comparison-enhanced className="mt-12">
             <p id="before-after-description" className="sr-only">
               After: {afterAlt}. Before: {beforeAlt}.
             </p>
@@ -139,19 +142,6 @@ export function BeforeAfterSlider({
             </div>
           </div>
 
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `(() => {
-                const root = document.currentScript?.parentElement;
-                const fallback = root?.querySelector("[data-comparison-fallback]");
-                const enhanced = root?.querySelector("[data-comparison-enhanced]");
-                if (fallback && enhanced) {
-                  fallback.setAttribute("hidden", "");
-                  enhanced.removeAttribute("hidden");
-                }
-              })();`,
-            }}
-          />
         </div>
       </div>
     </section>

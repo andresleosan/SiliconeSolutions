@@ -3,6 +3,8 @@ node_modules/
 out/
 playwright-report/
 test-results/
+qa/reports/
+qa/test-results/
 .playwright-mcp/
 .superpowers/
 .env

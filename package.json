@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "test:e2e": "next build && playwright test",
+    "test:e2e:install": "playwright install chromium",
     "media:prepare": "node scripts/prepare-media.mjs",
     "media:verify": "node scripts/verify-media.mjs"
   },
@@ -22,6 +24,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",

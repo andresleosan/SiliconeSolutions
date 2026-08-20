@@ -23,6 +23,7 @@ export type GalleryItem = MediaDimensions & {
   src: string;
   alt: string;
   label: string;
+  description: string;
 };
 
 export type Benefit = {
@@ -179,23 +180,34 @@ export const testimonials: Testimonial[] = [
 
 export const galleryItems: GalleryItem[] = [
   {
-    src: "/images/services.webp",
-    alt: "Silicone Solutions service overview flyer with contact and service information",
-    label: "Services overview",
-    width: 947,
-    height: 2048,
+    src: "/images/lavamanos.webp",
+    alt: "Clean white silicone seal between a washbasin and blue splashback",
+    label: "Washbasin sealing",
+    description: "A neat white seal following the washbasin and splashback joint.",
+    width: 1200,
+    height: 1600,
   },
   {
     src: "/images/poceta.webp",
     alt: "Clean white silicone seal around the base of a toilet",
     label: "Toilet base sealing",
+    description: "A clean silicone bead following the toilet base.",
     width: 1200,
     height: 1600,
   },
   {
-    src: "/images/lavamanos.webp",
-    alt: "Clean white silicone seal between a washbasin and blue splashback",
-    label: "Washbasin sealing",
+    src: "/images/banera.webp",
+    alt: "Bath edge showing a clean finished silicone seal",
+    label: "Bath reseal result",
+    description: "The completed bath edge after resealing.",
+    width: 1200,
+    height: 1600,
+  },
+  {
+    src: "/images/banera-antes.webp",
+    alt: "Bath edge showing an ageing silicone seal before replacement",
+    label: "Before condition",
+    description: "The original bath edge before the replacement work.",
     width: 1200,
     height: 1600,
   },
