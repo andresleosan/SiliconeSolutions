@@ -1,9 +1,10 @@
-import { processSteps, siteCopy } from "../src/content";
+import { processSteps, services, siteCopy } from "../src/content";
 import { AboutSection } from "../src/components/AboutSection";
 import { Hero } from "../src/components/Hero";
 import { MobileContactBar } from "../src/components/MobileContactBar";
 import { Navbar } from "../src/components/Navbar";
 import { ProblemSection } from "../src/components/ProblemSection";
+import { ServicesCarousel } from "../src/components/ServicesCarousel";
 import { TrustBar } from "../src/components/TrustBar";
 import { phoneHref, whatsappHref } from "../src/lib/contact";
 
@@ -34,6 +35,7 @@ export default function Home() {
           imageSrc="/images/lavamanos.jpg"
           phoneHref={phoneHref}
         />
+        <ServicesCarousel services={services} />
         <div id="contact" className="h-0" aria-hidden="true" />
       </main>
       <MobileContactBar whatsappHref={whatsappHref} phoneHref={phoneHref} />

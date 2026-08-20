@@ -3,6 +3,7 @@ export type Service = {
   description: string;
   benefit: string;
   image: string;
+  imageAlt: string;
   icon: string;
 };
 
@@ -37,6 +38,7 @@ export const services: Service[] = [
     description: "Clean silicone sealing around baths, sinks and shower areas.",
     benefit: "A precise, cleaner-looking finish for wet areas.",
     image: "/images/services.jpg",
+    imageAlt: "Fresh silicone sealing around a modern bath and shower area",
     icon: "Bath",
   },
   {
@@ -44,6 +46,7 @@ export const services: Service[] = [
     description: "Neat sealing around worktops, sinks and splashback edges.",
     benefit: "A professional finish for the areas used every day.",
     image: "/images/poceta.jpg",
+    imageAlt: "Clean silicone seal around a kitchen sink and worktop",
     icon: "CookingPot",
   },
   {
@@ -51,6 +54,7 @@ export const services: Service[] = [
     description: "Remove failed sealant and reseal shower trays, screens and joints.",
     benefit: "Restore a fresh, tidy appearance to your shower space.",
     image: "/images/banera.jpg",
+    imageAlt: "Resealed bath edge with a clean silicone finish",
     icon: "ShowerHead",
   },
   {
@@ -58,6 +62,7 @@ export const services: Service[] = [
     description: "Professional sealing for window frames and surrounding joints.",
     benefit: "A neat finish for domestic and commercial spaces.",
     image: "/images/lavamanos.jpg",
+    imageAlt: "Neat silicone sealing detail around a washbasin",
     icon: "PanelTop",
   },
   {
@@ -65,6 +70,7 @@ export const services: Service[] = [
     description: "Silicone sealing for commercial washrooms, kitchens and maintenance work.",
     benefit: "Specialist attention for busy property environments.",
     image: "/images/services.jpg",
+    imageAlt: "Silicone sealing work prepared for a commercial washroom",
     icon: "Building2",
   },
   {
@@ -72,6 +78,7 @@ export const services: Service[] = [
     description: "Careful removal of cracked or peeling sealant before a clean new bead.",
     benefit: "Refresh tired joints with a durable-looking finish.",
     image: "/images/banera-antes.jpg",
+    imageAlt: "Old sealant prepared for careful replacement around a bath",
     icon: "RefreshCw",
   },
 ];
