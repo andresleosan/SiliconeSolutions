@@ -11,7 +11,11 @@ const manrope = Manrope({
   variable: "--font-manrope",
 });
 
+const siteUrl = "https://siliconesolutions.pages.dev";
+const socialImageAlt = "Silicone Solutions professional silicone sealing in Jersey";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Professional Silicone Sealing in Jersey | Silicone Solutions",
   description:
     "Professional silicone sealing across Jersey for homes and businesses. Clean workmanship, durable results and competitive pricing.",
@@ -22,6 +26,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     siteName: siteCopy.businessName,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: socialImageAlt,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Professional Silicone Sealing in Jersey | Silicone Solutions",
+    description:
+      "Professional silicone sealing across Jersey for homes and businesses. Clean workmanship, durable results and competitive pricing.",
+    images: ["/og-image.png"],
   },
 };
 
@@ -42,6 +61,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="canonical" href={`${siteUrl}/`} />
+        <meta property="og:url" content={`${siteUrl}/`} />
         <link rel="preload" as="image" href="/images/services.webp" fetchPriority="high" />
         <style>{`
           main > section:first-child > .container > div,
