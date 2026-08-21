@@ -28,7 +28,8 @@ export const metadata: Metadata = {
     siteName: siteCopy.businessName,
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image-v2.jpg",
+        type: "image/jpeg",
         width: 1200,
         height: 630,
         alt: socialImageAlt,
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
     title: "Professional Silicone Sealing in Jersey | Silicone Solutions",
     description:
       "Professional silicone sealing across Jersey for homes and businesses. Clean workmanship, durable results and competitive pricing.",
-    images: [{ url: "/og-image.png", alt: socialImageAlt }],
+    images: [{ url: "/og-image-v2.jpg", alt: socialImageAlt }],
   },
 };
 
