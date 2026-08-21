@@ -99,12 +99,22 @@ export function BeforeAfterSlider({
                 />
               </div>
 
-              <span className="absolute left-4 top-4 rounded-full bg-[var(--navy)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)] sm:left-6 sm:top-6">
-                After
-              </span>
-              <span className="absolute right-4 top-4 rounded-full bg-[var(--orange)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--navy)] sm:right-6 sm:top-6">
-                Before
-              </span>
+              {reveal >= 25 ? (
+                <span
+                  data-comparison-after-label
+                  className="absolute left-4 top-4 rounded-full bg-[var(--navy)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--warm-white)] sm:left-6 sm:top-6"
+                >
+                  After
+                </span>
+              ) : null}
+              {reveal <= 75 ? (
+                <span
+                  data-comparison-before-label
+                  className="absolute right-4 top-4 rounded-full bg-[var(--orange)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--navy)] sm:right-6 sm:top-6"
+                >
+                  Before
+                </span>
+              ) : null}
 
               <div
                 className="pointer-events-none absolute inset-y-0 z-10 w-px bg-[var(--warm-white)] shadow-[0_0_0_1px_rgba(15,23,42,0.18)]"
@@ -112,7 +122,8 @@ export function BeforeAfterSlider({
                 aria-hidden="true"
               />
               <span
-                className="pointer-events-none absolute top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--warm-white)] bg-[var(--orange)] text-[var(--navy)] shadow-lg"
+                data-comparison-handle
+                className="pointer-events-none absolute top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--warm-white)] bg-[var(--navy)] text-[var(--warm-white)] shadow-lg"
                 style={{ left: `clamp(1.5rem, ${reveal}%, calc(100% - 1.5rem))` }}
                 aria-hidden="true"
               >

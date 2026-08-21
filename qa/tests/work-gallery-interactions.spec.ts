@@ -129,6 +129,25 @@ test("supports circular controls, keyboard navigation, dots, swipe, and announce
   await expectActive(page, 0);
 });
 
+test("hides the label on the narrow comparison side and uses the After color for the handle", async ({ page }) => {
+  await page.goto("/", { waitUntil: "load" });
+  const slider = page.locator("#before-after-range");
+  const comparison = page.locator("[data-comparison-enhanced]");
+  const handle = comparison.locator("[data-comparison-handle]");
+
+  await slider.press("Home");
+  for (let index = 0; index < 20; index += 1) await slider.press("ArrowRight");
+  await expect(comparison.locator("[data-comparison-after-label]")).toHaveCount(0);
+  await expect(comparison.locator("[data-comparison-before-label]")).toHaveCount(1);
+  await expect(handle).toHaveCSS("background-color", "rgb(15, 23, 42)");
+  await expect(handle).toHaveCSS("color", "rgb(250, 250, 248)");
+
+  await slider.press("End");
+  for (let index = 0; index < 20; index += 1) await slider.press("ArrowLeft");
+  await expect(comparison.locator("[data-comparison-after-label]")).toHaveCount(1);
+  await expect(comparison.locator("[data-comparison-before-label]")).toHaveCount(0);
+});
+
 test("exposes only the active card to assistive technology", async ({ page }) => {
   await openGallery(page);
 
