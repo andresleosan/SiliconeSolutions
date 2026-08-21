@@ -259,3 +259,95 @@ git status --short --branch
 ```
 
 Expected: clean worktree after the release-note commit, with no unrelated files.
+
+### Task 5: Simplify The Mobile Contact Bar
+
+**Files:**
+- Modify: `app/globals.css:326-359`.
+- Modify: `qa/tests/landing.spec.ts` in the mobile viewport coverage.
+- Read: `src/components/MobileContactBar.tsx` for the existing accessible labels and link structure.
+
+**Interfaces:**
+- Consumes: the existing `MobileContactBar` markup and site color variables.
+- Produces: a transparent mobile bar with two independently colored buttons, without changing contact URLs or desktop visibility.
+
+- [ ] **Step 1: Add the failing mobile style assertions**
+
+In the mobile viewport loop in `qa/tests/landing.spec.ts`, after locating `contactBar`, add a mobile-only assertion block:
+
+```ts
+const barStyles = await contactBar.evaluate((element) => {
+  const styles = getComputedStyle(element);
+  return {
+    backgroundColor: styles.backgroundColor,
+    borderWidth: styles.borderWidth,
+    borderStyle: styles.borderStyle,
+    boxShadow: styles.boxShadow,
+  };
+});
+expect(barStyles.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+expect(barStyles.borderWidth).toBe("0px");
+expect(barStyles.borderStyle).toBe("none");
+expect(barStyles.boxShadow).toBe("none");
+
+const whatsappStyles = await contactBar
+  .getByRole("link", { name: "WhatsApp", exact: true })
+  .evaluate((element) => {
+    const styles = getComputedStyle(element);
+    return { backgroundColor: styles.backgroundColor, color: styles.color };
+  });
+expect(whatsappStyles.backgroundColor).toBe("rgb(15, 23, 42)");
+expect(whatsappStyles.color).toBe("rgb(250, 250, 248)");
+
+const callStyles = await contactBar
+  .getByRole("link", { name: "Call Now", exact: true })
+  .evaluate((element) => {
+    const styles = getComputedStyle(element);
+    return { backgroundColor: styles.backgroundColor, color: styles.color };
+  });
+expect(callStyles.backgroundColor).toBe("rgb(249, 115, 22)");
+expect(callStyles.color).toBe("rgb(15, 23, 42)");
+```
+
+- [ ] **Step 2: Run the focused test to verify it fails**
+
+Run: `corepack pnpm run build`
+
+Run: `corepack pnpm exec playwright test qa/tests/landing.spec.ts -g "fits mobile and desktop viewports"`
+
+Expected: FAIL because the current bar has navy background, white border, stone shadow, and the WhatsApp action has no navy background.
+
+- [ ] **Step 3: Apply the minimal CSS change**
+
+Update `.mobile-contact-bar` to retain its fixed positioning and two-column layout while using:
+
+```css
+padding: 0;
+border: 0;
+background: transparent;
+box-shadow: none;
+```
+
+Update `.mobile-contact-bar__action` to use the WhatsApp color treatment by default:
+
+```css
+background: var(--navy);
+color: var(--warm-white);
+```
+
+Keep `.mobile-contact-bar__action--primary` orange with navy text. Replace the combined hover selector so hovering WhatsApp does not turn it orange; the two actions must retain their respective colors in their default state. Do not change markup, labels, hrefs, desktop hiding, or safe-area spacing.
+
+- [ ] **Step 4: Run the focused test to verify it passes**
+
+Run: `corepack pnpm run build`
+
+Run: `corepack pnpm exec playwright test qa/tests/landing.spec.ts -g "fits mobile and desktop viewports"`
+
+Expected: PASS with the transparent bar, navy WhatsApp button, orange Call Now button, and unchanged desktop-hidden behavior.
+
+- [ ] **Step 5: Commit the mobile bar task**
+
+```sh
+git add app/globals.css qa/tests/landing.spec.ts
+git commit -m "fix: simplify mobile contact bar"
+```
