@@ -11,7 +11,8 @@
     "test:e2e": "next build && playwright test",
     "test:e2e:install": "playwright install chromium",
     "media:prepare": "node scripts/prepare-media.mjs",
-    "media:verify": "node scripts/verify-media.mjs"
+    "media:verify": "node scripts/verify-media.mjs",
+    "social:prepare": "node scripts/generate-social-preview.mjs"
   },
   "keywords": [],
   "author": "",
