@@ -32,7 +32,11 @@ V2 pre-deployment verification:
 - Lint, TypeScript, media verification, and dependency audit passed.
 - Exported metadata references `/og-image-v2.jpg` and the JPEG reports `1200 x 630`.
 
-Production verification will be recorded after the Cloudflare Pages deployment.
+Production verification on `2026-08-21`:
+
+- `https://siliconesolutions.pages.dev/` returned HTTP `200` with `og:image` set to `https://siliconesolutions.pages.dev/og-image-v2.jpg` and `og:image:type` set to `image/jpeg`.
+- `https://siliconesolutions.pages.dev/og-image-v2.jpg` returned HTTP `200` with `Content-Type: image/jpeg`.
+- The shared URL remains the clean URL without query parameters.
 
 ## Rollback
 
