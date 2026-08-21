@@ -25,7 +25,11 @@ test("exposes complete social sharing metadata and the static preview image", as
   );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     "content",
-    "https://siliconesolutions.pages.dev/og-image.png",
+    "https://siliconesolutions.pages.dev/og-image-v2.jpg",
+  );
+  await expect(page.locator('meta[property="og:image:type"]')).toHaveAttribute(
+    "content",
+    "image/jpeg",
   );
   await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1200");
   await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute("content", "630");
@@ -44,18 +48,22 @@ test("exposes complete social sharing metadata and the static preview image", as
   );
   await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
     "content",
-    "https://siliconesolutions.pages.dev/og-image.png",
+    "https://siliconesolutions.pages.dev/og-image-v2.jpg",
   );
   await expect(page.locator('meta[name="twitter:image:alt"]')).toHaveAttribute(
     "content",
     socialImageAlt,
   );
 
-  const imageResponse = await page.request.get("/og-image.png");
+  const imageResponse = await page.request.get("/og-image-v2.jpg");
   expect(imageResponse.ok()).toBe(true);
-  expect(imageResponse.headers()["content-type"]).toContain("image/png");
+  expect(imageResponse.headers()["content-type"]).toContain("image/jpeg");
   const imageMetadata = await sharp(await imageResponse.body()).metadata();
-  expect(imageMetadata.format).toBe("png");
+  expect(imageMetadata.format).toBe("jpeg");
   expect(imageMetadata.width).toBe(1200);
   expect(imageMetadata.height).toBe(630);
+
+  const rollbackImageResponse = await page.request.get("/og-image.png");
+  expect(rollbackImageResponse.ok()).toBe(true);
+  expect(rollbackImageResponse.headers()["content-type"]).toContain("image/png");
 });
