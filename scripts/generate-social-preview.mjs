@@ -1,4 +1,9 @@
 import sharp from "sharp";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const publicDirectory = path.join(projectRoot, "public");
 
 const width = 1200;
 const height = 630;
@@ -20,8 +25,8 @@ const textOverlay = Buffer.from(`
   </svg>
 `);
 
-const logo = await sharp("public/images/logo-clean.webp")
-  .resize({ width: 320, height: 120, fit: "contain" })
+const logo = await sharp(path.join(publicDirectory, "images", "logo-clean.webp"))
+  .resize({ width: 320, height: 120, fit: "contain", background: warmWhite })
   .png()
   .toBuffer();
 
@@ -38,4 +43,4 @@ await sharp({
     { input: logo, top: 73, left: 94 },
   ])
   .png({ compressionLevel: 9 })
-  .toFile("public/og-image.png");
+  .toFile(path.join(publicDirectory, "og-image.png"));
