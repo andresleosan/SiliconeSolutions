@@ -14,11 +14,11 @@ import {
   ShowerHead,
   type LucideIcon,
 } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 import { type Service } from "../content";
 import { whatsappHref } from "../lib/contact";
+import { usePrefersReducedMotion } from "../lib/use-prefers-reduced-motion";
 
 type ServicesCarouselProps = {
   services: Service[];
@@ -36,8 +36,7 @@ const serviceIcons: Record<string, LucideIcon> = {
 export function ServicesCarousel({ services }: ServicesCarouselProps) {
   const railRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLElement | null>>([]);
-  const shouldReduceMotion = useReducedMotion();
-  const motionDisabled = shouldReduceMotion === true;
+  const motionDisabled = usePrefersReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPointerInside, setIsPointerInside] = useState(false);
   const [isFocusWithin, setIsFocusWithin] = useState(false);
@@ -132,9 +131,6 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
         }
       }}
     >
-      <noscript>
-        <style>{`[data-service-card] { opacity: 1 !important; transform: none !important; }`}</style>
-      </noscript>
       <div className="container">
         <div className="flex flex-col justify-between gap-8 border-b border-[var(--warm-white)]/15 pb-10 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
@@ -189,22 +185,13 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
             const Icon = serviceIcons[service.icon];
 
             return (
-              <motion.article
+              <article
                 key={service.title}
                 ref={(card) => {
                   cardRefs.current[index] = card;
                 }}
                 data-service-card
                 className="group flex min-w-[calc(100%-1.5rem)] snap-start flex-col overflow-hidden rounded-[1.5rem] border border-[var(--warm-white)]/15 bg-[var(--warm-white)]/5 sm:min-w-[31rem] lg:min-w-[35rem]"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{
-                  duration: motionDisabled ? 0 : 0.55,
-                  delay: motionDisabled ? 0 : index * 0.06,
-                  ease: "easeOut",
-                }}
-                whileHover={motionDisabled ? undefined : { y: -8 }}
               >
                 <div className="relative overflow-hidden bg-[var(--stone)]">
                   <Image
@@ -234,7 +221,7 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
                     {service.benefit}
                   </p>
                 </div>
-              </motion.article>
+              </article>
             );
           })}
         </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowUpRight, Phone } from "lucide-react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 type HeroCopy = {
@@ -19,17 +18,6 @@ type HeroProps = {
   quoteHref: string;
 };
 
-function getRevealVariants(reducedMotion: boolean): Variants {
-  return {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: reducedMotion ? 0 : 0.6, ease: "easeOut" },
-    },
-  };
-}
-
 export function Hero({
   siteCopy,
   videoSrc,
@@ -39,8 +27,6 @@ export function Hero({
   quoteHref,
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const shouldReduceMotion = useReducedMotion();
-  const revealVariants = getRevealVariants(shouldReduceMotion === true);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -136,12 +122,7 @@ export function Hero({
         aria-hidden="true"
       />
       <div className="container grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(22rem,0.75fr)] lg:gap-16 lg:py-28">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={revealVariants}
-          className="relative z-10"
-        >
+        <div className="relative z-10">
           <p className="mb-5 flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--orange)]">
             <span className="h-0.5 w-9 bg-[var(--orange)]" aria-hidden="true" />
             {siteCopy.eyebrow}
@@ -172,14 +153,9 @@ export function Hero({
             <span className="font-extrabold text-[var(--warm-white)]">15+</span>
             <span>years of experience</span>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.figure
-          initial="hidden"
-          animate="visible"
-          variants={revealVariants}
-          className="relative m-0 overflow-hidden rounded-[2rem] border border-[var(--warm-white)]/15 bg-[var(--warm-white)]/5 p-2 shadow-2xl shadow-black/25"
-        >
+        <figure className="relative m-0 overflow-hidden rounded-[2rem] border border-[var(--warm-white)]/15 bg-[var(--warm-white)]/5 p-2 shadow-2xl shadow-black/25">
           <div className="relative overflow-hidden rounded-[1.5rem] bg-black">
             <video
               ref={videoRef}
@@ -204,7 +180,7 @@ export function Hero({
               <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--orange)]" aria-hidden="true" />
             </figcaption>
           </div>
-        </motion.figure>
+        </figure>
       </div>
     </section>
   );

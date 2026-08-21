@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState, useSyncExternalStore, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 
 import { SectionHeading } from "./SectionHeading";
 import { type GalleryItem } from "../content";
@@ -12,6 +11,7 @@ import {
   relativeGalleryPosition,
   wrapGalleryIndex,
 } from "../lib/gallery";
+import { usePrefersReducedMotion } from "../lib/use-prefers-reduced-motion";
 
 type WorkGalleryProps = {
   items: GalleryItem[];
@@ -19,10 +19,7 @@ type WorkGalleryProps = {
 
 const AUTO_ADVANCE_MS = 4500;
 const SWIPE_THRESHOLD_PX = 50;
-
-const subscribeToHydration = () => () => undefined;
-const getClientSnapshot = () => true;
-const getServerSnapshot = () => false;
+const DEPARTURE_DURATION_MS = 300;
 
 const stack = [
   { x: 0, y: 0, scale: 1, rotate: 0, zIndex: 40 },
@@ -32,13 +29,7 @@ const stack = [
 ];
 
 export function WorkGallery({ items }: WorkGalleryProps) {
-  const shouldReduceMotion = useReducedMotion();
-  const hydrated = useSyncExternalStore(
-    subscribeToHydration,
-    getClientSnapshot,
-    getServerSnapshot,
-  );
-  const reducedMotion = hydrated && shouldReduceMotion === true;
+  const reducedMotion = usePrefersReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoPlayEnabled, setAutoPlayEnabled] = useState(true);
   const [pointerInside, setPointerInside] = useState(false);
@@ -46,6 +37,9 @@ export function WorkGallery({ items }: WorkGalleryProps) {
   const [dragging, setDragging] = useState(false);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [departingIndex, setDepartingIndex] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState(0);
+  const pointerIdRef = useRef<number | null>(null);
+  const dragStartXRef = useRef<number | null>(null);
   const currentIndex = wrapGalleryIndex(activeIndex, items.length);
   const activeItem = items[currentIndex];
 
@@ -92,12 +86,65 @@ export function WorkGallery({ items }: WorkGalleryProps) {
     reducedMotion,
   ]);
 
+  useEffect(() => {
+    if (departingIndex === null) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setDepartingIndex(null), DEPARTURE_DURATION_MS);
+    return () => window.clearTimeout(timeout);
+  }, [departingIndex]);
+
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
 
     event.preventDefault();
     const nextDirection = event.key === "ArrowRight" ? 1 : -1;
     navigate(currentIndex + nextDirection, nextDirection);
+  };
+
+  const handlePointerDown = (event: PointerEvent<HTMLElement>, isActive: boolean) => {
+    if (!isActive || reducedMotion) {
+      return;
+    }
+
+    pointerIdRef.current = event.pointerId;
+    dragStartXRef.current = event.clientX;
+    setDragging(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const finishPointerDrag = (event: PointerEvent<HTMLElement>, shouldNavigate: boolean) => {
+    if (event.pointerId !== pointerIdRef.current) {
+      return;
+    }
+
+    const offset = dragOffset;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    pointerIdRef.current = null;
+    dragStartXRef.current = null;
+    setDragging(false);
+    setDragOffset(0);
+
+    if (shouldNavigate && offset <= -SWIPE_THRESHOLD_PX) {
+      navigate(currentIndex + 1, 1);
+    } else if (shouldNavigate && offset >= SWIPE_THRESHOLD_PX) {
+      navigate(currentIndex - 1, -1);
+    }
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
+    if (
+      !dragging ||
+      event.pointerId !== pointerIdRef.current ||
+      dragStartXRef.current === null
+    ) {
+      return;
+    }
+
+    setDragOffset(event.clientX - dragStartXRef.current);
   };
 
   return (
@@ -150,38 +197,29 @@ export function WorkGallery({ items }: WorkGalleryProps) {
                 const isActive = depth === 0;
                 const isDeparting = index === departingIndex;
 
+                const x = dragging && isActive
+                  ? dragOffset
+                  : isDeparting
+                    ? direction * -360
+                    : reducedMotion
+                      ? 0
+                      : transform.x;
+                const rotate = reducedMotion ? 0 : transform.rotate;
+
                 return (
-                  <motion.figure
+                  <figure
                     className={`col-start-1 row-start-1 m-0 overflow-hidden rounded-[1.5rem] bg-[var(--warm-white)] shadow-[0_1.5rem_4rem_rgba(15,23,42,0.16)] ${isActive ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"}`}
                     key={item.src}
-                    animate={{
-                      x: reducedMotion ? 0 : isDeparting ? direction * -360 : transform.x,
-                      y: transform.y,
-                      scale: transform.scale,
-                      rotate: reducedMotion ? 0 : transform.rotate,
+                    style={{
+                      zIndex: isDeparting ? 50 : transform.zIndex,
+                      transform: `translate3d(${x}px, ${transform.y}px, 0) scale(${transform.scale}) rotate(${rotate}deg)`,
                       opacity: isDeparting ? 0 : 1,
+                      transition: dragging && isActive ? "none" : "transform 300ms ease-out, opacity 300ms ease-out",
                     }}
-                    transition={
-                      reducedMotion
-                        ? { duration: 0 }
-                        : { type: "spring", stiffness: 260, damping: 28 }
-                    }
-                    style={{ zIndex: isDeparting ? 50 : transform.zIndex }}
-                    drag={isActive && !reducedMotion ? "x" : false}
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.18}
-                    onDragStart={() => setDragging(true)}
-                    onDragEnd={(_, info) => {
-                      setDragging(false);
-                      if (info.offset.x <= -SWIPE_THRESHOLD_PX) {
-                        navigate(currentIndex + 1, 1);
-                      } else if (info.offset.x >= SWIPE_THRESHOLD_PX) {
-                        navigate(currentIndex - 1, -1);
-                      }
-                    }}
-                    onAnimationComplete={() => {
-                      if (isDeparting) setDepartingIndex(null);
-                    }}
+                    onPointerDown={(event) => handlePointerDown(event, isActive)}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={(event) => finishPointerDrag(event, true)}
+                    onPointerCancel={(event) => finishPointerDrag(event, false)}
                     aria-hidden={isActive ? "false" : "true"}
                     aria-label={`Project ${index + 1} of ${items.length}: ${item.label}`}
                     inert={isActive ? undefined : true}
@@ -209,7 +247,7 @@ export function WorkGallery({ items }: WorkGalleryProps) {
                         {item.description}
                       </p>
                     </figcaption>
-                  </motion.figure>
+                  </figure>
                 );
               })}
             </div>
