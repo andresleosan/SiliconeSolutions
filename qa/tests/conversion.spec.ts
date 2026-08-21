@@ -149,6 +149,7 @@ test("renders benefits, process, and honest testimonial states", async ({ page }
   await expect(page.getByText("Example review", { exact: true })).toHaveCount(2);
   await expect(page.getByText("Example review - replace before launch", { exact: true })).toHaveCount(2);
   await expect(page.getByText("Kate Forde", { exact: true })).toBeVisible();
+  await expect(page.locator("section[aria-labelledby='testimonials-title'] blockquote").first()).not.toContainText("👌");
 
   const benefitNumbers = page.locator("section[aria-labelledby='benefits-title'] article > span");
   await expect(benefitNumbers).toHaveCount(6);
@@ -268,6 +269,9 @@ test("blocks invalid quote submission and opens only an encoded valid request", 
 test("exposes only confirmed conversion routes", async ({ page }) => {
   await openConversionPage(page);
   const contactAreas = [page.locator("#contact"), page.locator("footer")];
+  const defaultWhatsAppHref = `https://wa.me/447700323453?text=${encodeURIComponent(
+    "Hello, I have just seen your website and I would like to hire your services, please.",
+  )}`;
 
   for (const area of contactAreas) {
     await expect(area.getByRole("link", { name: "Call +44 7700 323453" })).toHaveAttribute(
@@ -280,7 +284,7 @@ test("exposes only confirmed conversion routes", async ({ page }) => {
     );
     await expect(area.getByRole("link", { name: "Message on WhatsApp" })).toHaveAttribute(
       "href",
-      "https://wa.me/447700323453",
+      defaultWhatsAppHref,
     );
   }
 
@@ -291,7 +295,7 @@ test("exposes only confirmed conversion routes", async ({ page }) => {
   expect(footerHrefs).toEqual(
     [
       "tel:+447700323453",
-      "https://wa.me/447700323453",
+      defaultWhatsAppHref,
       "mailto:davidcameron481@yahoo.com",
     ].sort(),
   );

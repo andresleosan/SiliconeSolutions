@@ -34,6 +34,14 @@ test("buildQuoteWhatsAppUrl trims and encodes every field", () => {
   );
 });
 
+test("provides a prefilled website-intent WhatsApp link", () => {
+  const url = new URL(contact.whatsappHref);
+  assert.equal(
+    url.searchParams.get("text"),
+    "Hello, I have just seen your website and I would like to hire your services, please.",
+  );
+});
+
 test("validateQuoteForm reports each whitespace-only field", () => {
   assert.equal(typeof contact.validateQuoteForm, "function");
   assert.deepEqual(

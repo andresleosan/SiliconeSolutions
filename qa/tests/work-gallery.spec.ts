@@ -5,57 +5,40 @@ const gallery = {
   activeCard: "[data-gallery-card][data-active='true']",
 };
 
-test("offers persistent rotation control with appropriate announcements", async ({ page }) => {
+test("keeps rotating until the active image is clicked", async ({ page }) => {
+  await page.goto("/");
+
+  const section = page.locator(gallery.section);
+  const liveRegion = section.locator("[data-gallery-live]");
+  const activeCard = section.locator(gallery.activeCard);
+  await expect(section.locator("[data-gallery-autoplay-control]")).toHaveCount(0);
+  await expect(liveRegion).toHaveAttribute("aria-live", "off");
+
+  const activeProject = await section.locator(gallery.activeCard).getAttribute("aria-label");
+  await page.waitForTimeout(5_000);
+  await expect(section.locator(gallery.activeCard)).not.toHaveAttribute("aria-label", activeProject ?? "");
+
+  const clickedProject = await activeCard.getAttribute("aria-label");
+  await activeCard.click();
+  await expect(liveRegion).toHaveAttribute("aria-live", "polite");
+  await page.waitForTimeout(5_000);
+  await expect(section.locator(gallery.activeCard)).toHaveAttribute("aria-label", clickedProject ?? "");
+});
+
+test("pauses rotation while keyboard focus enters the carousel", async ({ page }) => {
   await page.goto("/");
 
   const section = page.locator(gallery.section);
   const liveRegion = section.locator("[data-gallery-live]");
   const rotationButton = section.locator("[data-gallery-autoplay-control]");
-
-  await expect(rotationButton).toHaveAccessibleName("Pause automatic rotation");
-  await expect(liveRegion).toHaveAttribute("aria-live", "off");
-
-  await rotationButton.click();
-  await expect(rotationButton).toHaveAccessibleName("Start automatic rotation");
-  await expect(liveRegion).toHaveAttribute("aria-live", "polite");
+  await expect(rotationButton).toHaveCount(0);
 
   const activeProject = await section.locator(gallery.activeCard).getAttribute("aria-label");
-  await page.waitForTimeout(5_000);
-  await expect(section.locator(gallery.activeCard)).toHaveAttribute("aria-label", activeProject ?? "");
-
-  await page.keyboard.press("Space");
-  await expect(liveRegion).toHaveAttribute("aria-live", "off");
-  await page.mouse.move(0, 0);
-  await page.keyboard.press("Tab");
-  await expect(rotationButton).toHaveAccessibleName("Pause automatic rotation");
-
-  for (let step = 0; step < 10; step += 1) {
-    const focusInside = await section.evaluate((element) =>
-      element.contains(document.activeElement),
-    );
-    if (!focusInside) break;
-    await page.keyboard.press("Tab");
-  }
-
-  await expect
-    .poll(() => section.evaluate((element) => element.contains(document.activeElement)))
-    .toBe(false);
-  await expect
-    .poll(() => section.locator(gallery.activeCard).getAttribute("aria-label"), { timeout: 6_000 })
-    .not.toBe(activeProject);
-});
-
-test("stops rotation after keyboard focus enters the carousel", async ({ page }) => {
-  await page.goto("/");
-
-  const section = page.locator(gallery.section);
   await section.locator("#work-gallery-deck").focus();
-  await expect(section.getByRole("button", { name: "Start automatic rotation" })).toBeVisible();
-
-  const activeProject = await section.locator(gallery.activeCard).getAttribute("aria-label");
-  await page.locator("#work-gallery-deck").evaluate((element) => (element as HTMLElement).blur());
   await page.waitForTimeout(5_000);
   await expect(section.locator(gallery.activeCard)).toHaveAttribute("aria-label", activeProject ?? "");
+
+  await expect(liveRegion).toHaveAttribute("aria-live", "off");
 });
 
 test("provides 32px targets for every project dot", async ({ page }) => {

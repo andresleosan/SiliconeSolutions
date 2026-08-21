@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 
 import { SectionHeading } from "./SectionHeading";
@@ -32,7 +32,6 @@ export function WorkGallery({ items }: WorkGalleryProps) {
   const reducedMotion = usePrefersReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoPlayEnabled, setAutoPlayEnabled] = useState(true);
-  const [pointerInside, setPointerInside] = useState(false);
   const [focusInside, setFocusInside] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [direction, setDirection] = useState<1 | -1>(1);
@@ -40,6 +39,7 @@ export function WorkGallery({ items }: WorkGalleryProps) {
   const [dragOffset, setDragOffset] = useState(0);
   const pointerIdRef = useRef<number | null>(null);
   const dragStartXRef = useRef<number | null>(null);
+  const suppressClickRef = useRef(false);
   const currentIndex = wrapGalleryIndex(activeIndex, items.length);
   const activeItem = items[currentIndex];
 
@@ -52,7 +52,6 @@ export function WorkGallery({ items }: WorkGalleryProps) {
     setDirection(nextDirection);
     setDepartingIndex(reducedMotion ? null : currentIndex);
     setActiveIndex(nextIndex);
-    setAutoPlayEnabled(false);
   };
 
   useEffect(() => {
@@ -60,7 +59,6 @@ export function WorkGallery({ items }: WorkGalleryProps) {
       !canAutoAdvance({
         autoPlayEnabled,
         reducedMotion,
-        pointerInside,
         focusInside,
         dragging,
         itemCount: items.length,
@@ -82,7 +80,6 @@ export function WorkGallery({ items }: WorkGalleryProps) {
     dragging,
     focusInside,
     items.length,
-    pointerInside,
     reducedMotion,
   ]);
 
@@ -110,6 +107,7 @@ export function WorkGallery({ items }: WorkGalleryProps) {
 
     pointerIdRef.current = event.pointerId;
     dragStartXRef.current = event.clientX;
+    suppressClickRef.current = false;
     setDragging(true);
     event.currentTarget.setPointerCapture(event.pointerId);
   };
@@ -120,6 +118,8 @@ export function WorkGallery({ items }: WorkGalleryProps) {
     }
 
     const offset = dragOffset;
+    const didSwipe = shouldNavigate && Math.abs(offset) >= SWIPE_THRESHOLD_PX;
+    suppressClickRef.current = didSwipe;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
@@ -128,9 +128,9 @@ export function WorkGallery({ items }: WorkGalleryProps) {
     setDragging(false);
     setDragOffset(0);
 
-    if (shouldNavigate && offset <= -SWIPE_THRESHOLD_PX) {
+    if (didSwipe && offset <= -SWIPE_THRESHOLD_PX) {
       navigate(currentIndex + 1, 1);
-    } else if (shouldNavigate && offset >= SWIPE_THRESHOLD_PX) {
+    } else if (didSwipe && offset >= SWIPE_THRESHOLD_PX) {
       navigate(currentIndex - 1, -1);
     }
   };
@@ -153,19 +153,8 @@ export function WorkGallery({ items }: WorkGalleryProps) {
       aria-labelledby="gallery-title"
       aria-roledescription="carousel"
       aria-label="Silicone Solutions work gallery"
-      onPointerEnter={() => setPointerInside(true)}
-      onPointerLeave={() => setPointerInside(false)}
-      onFocusCapture={(event) => {
+      onFocusCapture={() => {
         setFocusInside(true);
-        const enteredFromOutside = !event.currentTarget.contains(
-          event.relatedTarget as Node | null,
-        );
-        if (
-          enteredFromOutside &&
-          !(event.target as HTMLElement).closest("[data-gallery-autoplay-control]")
-        ) {
-          setAutoPlayEnabled(false);
-        }
       }}
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
@@ -220,6 +209,13 @@ export function WorkGallery({ items }: WorkGalleryProps) {
                     onPointerMove={handlePointerMove}
                     onPointerUp={(event) => finishPointerDrag(event, true)}
                     onPointerCancel={(event) => finishPointerDrag(event, false)}
+                    onClick={() => {
+                      if (suppressClickRef.current) {
+                        suppressClickRef.current = false;
+                        return;
+                      }
+                      if (isActive) setAutoPlayEnabled(false);
+                    }}
                     aria-hidden={isActive ? "false" : "true"}
                     aria-label={`Project ${index + 1} of ${items.length}: ${item.label}`}
                     inert={isActive ? undefined : true}
@@ -264,8 +260,7 @@ export function WorkGallery({ items }: WorkGalleryProps) {
                 <ArrowLeft aria-hidden="true" size={18} strokeWidth={2} />
               </button>
 
-              <div className="flex flex-col items-center gap-3">
-                <div className="flex items-center justify-center" aria-label="Choose a project">
+              <div className="flex items-center justify-center" aria-label="Choose a project">
                   {items.map((item, index) => (
                     <button
                       type="button"
@@ -283,24 +278,6 @@ export function WorkGallery({ items }: WorkGalleryProps) {
                       />
                     </button>
                   ))}
-                </div>
-
-                <button
-                  type="button"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--navy)]/25 bg-[var(--warm-white)] px-4 text-xs font-extrabold uppercase tracking-[0.08em] text-[var(--navy)] transition-colors hover:border-[var(--navy)]"
-                  aria-label={autoPlayEnabled ? "Pause automatic rotation" : "Start automatic rotation"}
-                  aria-controls="work-gallery-deck"
-                  disabled={reducedMotion || items.length <= 1}
-                  onClick={() => setAutoPlayEnabled((enabled) => !enabled)}
-                  data-gallery-autoplay-control
-                >
-                  {autoPlayEnabled ? (
-                    <Pause aria-hidden="true" size={14} fill="currentColor" />
-                  ) : (
-                    <Play aria-hidden="true" size={14} fill="currentColor" />
-                  )}
-                  {autoPlayEnabled ? "Pause" : "Start"}
-                </button>
               </div>
 
               <button

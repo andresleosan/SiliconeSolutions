@@ -142,7 +142,7 @@ export function Hero({
               <ArrowUpRight aria-hidden="true" size={17} strokeWidth={2.25} />
             </a>
             <a
-              className="button border border-[var(--warm-white)]/35 bg-transparent text-[var(--warm-white)] hover:border-[var(--warm-white)] hover:bg-[var(--warm-white)] hover:text-[var(--navy)]"
+              className="button button--ghost"
               href={phoneHref}
             >
               <Phone aria-hidden="true" size={16} strokeWidth={2.25} />

@@ -69,15 +69,9 @@ async function dragActiveCard(page: Page, distance: number) {
   await page.mouse.up();
 }
 
-test("auto-advances every 4500ms and pauses while the pointer is inside", async ({ page }) => {
+test("auto-advances every 4500ms and pauses after the active image is clicked", async ({ page }) => {
   await openGallery(page);
   await expectActive(page, 0);
-
-  const rotationButton = page.locator("[data-gallery-autoplay-control]");
-  await rotationButton.click();
-  await rotationButton.click();
-  await rotationButton.evaluate((element) => (element as HTMLElement).blur());
-  await page.mouse.move(0, 0);
 
   await page.waitForTimeout(4_200);
   await expectActive(page, 0);
@@ -85,12 +79,24 @@ test("auto-advances every 4500ms and pauses while the pointer is inside", async 
     .poll(() => page.locator(`${activeCardSelector} h3`).innerText(), { timeout: 1_500 })
     .toBe(projectTitles[1]);
 
-  const section = page.locator(sectionSelector);
-  await section.hover({ position: { x: 20, y: 180 } });
-  await page.waitForTimeout(100);
-  const pausedTitle = await page.locator(`${activeCardSelector} h3`).innerText();
+  const activeCard = page.locator(activeCardSelector);
+  await activeCard.click();
+  const pausedTitle = await activeCard.locator("h3").innerText();
   await page.waitForTimeout(5_000);
-  await expect(page.locator(`${activeCardSelector} h3`)).toHaveText(pausedTitle);
+  await expect(activeCard.locator("h3")).toHaveText(pausedTitle);
+});
+
+test("keeps autoplay enabled after a swipe", async ({ page }) => {
+  await openGallery(page);
+  await dragActiveCard(page, -80);
+  await expectActive(page, 1);
+  await page.locator("#work-gallery-deck").evaluate((element) => (element as HTMLElement).blur());
+  await page.mouse.move(0, 0);
+
+  await page.waitForTimeout(4_200);
+  await expect
+    .poll(() => page.locator(`${activeCardSelector} h3`).innerText(), { timeout: 1_500 })
+    .toBe(projectTitles[2]);
 });
 
 test("supports circular controls, keyboard navigation, dots, swipe, and announcements", async ({ page }) => {

@@ -8,7 +8,10 @@ export type QuoteFormValues = {
 export type QuoteFormErrors = Partial<Record<keyof QuoteFormValues, string>>;
 
 export const phoneHref = "tel:+447700323453";
-export const whatsappHref = "https://wa.me/447700323453";
+export const whatsappBaseHref = "https://wa.me/447700323453";
+export const whatsappMessage =
+  "Hello, I have just seen your website and I would like to hire your services, please.";
+export const whatsappHref = `${whatsappBaseHref}?text=${encodeURIComponent(whatsappMessage)}`;
 export const emailHref = "mailto:davidcameron481@yahoo.com";
 
 export function normalizeQuoteFormValues(values: QuoteFormValues): QuoteFormValues {
@@ -42,5 +45,5 @@ export function buildQuoteWhatsAppUrl(values: QuoteFormValues): string {
     `Message: ${normalized.message}`,
   ].join("\n");
 
-  return `${whatsappHref}?text=${encodeURIComponent(body)}`;
+  return `${whatsappBaseHref}?text=${encodeURIComponent(body)}`;
 }

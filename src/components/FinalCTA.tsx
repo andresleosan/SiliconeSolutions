@@ -22,13 +22,13 @@ export function FinalCTA({ title, description, phoneHref }: FinalCTAProps) {
         </div>
         <div className="flex flex-wrap gap-3">
           <a
-            className="button bg-[var(--navy)] text-[var(--warm-white)] hover:bg-[var(--navy)]"
+            className="button button--navy"
             href="#contact"
           >
             Get Free Quote
             <ArrowUpRight aria-hidden="true" size={16} strokeWidth={2.25} />
           </a>
-          <a className="button border border-[var(--navy)] text-[var(--navy)]" href={phoneHref}>
+          <a className="button button--light" href={phoneHref}>
             <Phone aria-hidden="true" size={16} strokeWidth={2.25} />
             Call Now
           </a>

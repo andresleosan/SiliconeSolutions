@@ -24,7 +24,6 @@ test("canAutoAdvance requires normal motion and no interaction", () => {
   const idle = {
     autoPlayEnabled: true,
     reducedMotion: false,
-    pointerInside: false,
     focusInside: false,
     dragging: false,
     itemCount: 4,
@@ -33,7 +32,6 @@ test("canAutoAdvance requires normal motion and no interaction", () => {
   assert.equal(canAutoAdvance(idle), true);
   assert.equal(canAutoAdvance({ ...idle, autoPlayEnabled: false }), false);
   assert.equal(canAutoAdvance({ ...idle, reducedMotion: true }), false);
-  assert.equal(canAutoAdvance({ ...idle, pointerInside: true }), false);
   assert.equal(canAutoAdvance({ ...idle, focusInside: true }), false);
   assert.equal(canAutoAdvance({ ...idle, dragging: true }), false);
   assert.equal(canAutoAdvance({ ...idle, itemCount: 1 }), false);

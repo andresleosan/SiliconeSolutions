@@ -159,7 +159,7 @@ export const processSteps: ProcessStep[] = [
 
 export const testimonials: Testimonial[] = [
   {
-    quote: "I can highly recommend David Cameron from Silicone Solutions C.I. Ltd. He does silicone work for everything from bathrooms to kitchens and flooring etc. 👌",
+    quote: "I can highly recommend David Cameron from Silicone Solutions C.I. Ltd. He does silicone work for everything from bathrooms to kitchens and flooring etc.",
     author: "Kate Forde",
     source: "Good Builders Jersey Business - Facebook recommendation",
     verified: true,

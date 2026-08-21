@@ -53,7 +53,7 @@ export function ProblemSection({
             </ul>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 sm:items-end">
+          <div className="grid gap-5 sm:grid-cols-2 sm:items-start sm:content-start">
             <figure className="m-0">
               <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
                 <Image
@@ -69,7 +69,7 @@ export function ProblemSection({
                 Visible result: an ageing sealant edge
               </figcaption>
             </figure>
-            <figure className="m-0 sm:mb-10">
+            <figure className="m-0">
               <div className="overflow-hidden rounded-[1.5rem] bg-[var(--stone)]">
                 <Image
                   src={resultImage}

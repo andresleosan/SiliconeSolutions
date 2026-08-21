@@ -1,7 +1,6 @@
 type AutoAdvanceState = {
   autoPlayEnabled: boolean;
   reducedMotion: boolean;
-  pointerInside: boolean;
   focusInside: boolean;
   dragging: boolean;
   itemCount: number;
@@ -25,7 +24,6 @@ export function canAutoAdvance(state: AutoAdvanceState): boolean {
     state.itemCount > 1 &&
     state.autoPlayEnabled &&
     !state.reducedMotion &&
-    !state.pointerInside &&
     !state.focusInside &&
     !state.dragging
   );

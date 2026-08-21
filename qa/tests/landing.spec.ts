@@ -120,6 +120,14 @@ test("exposes the exact landing structure and confirmed contact routes", async (
     "href",
     /wa\.me\/447700323453/,
   );
+
+  const defaultWhatsAppMessage =
+    "Hello, I have just seen your website and I would like to hire your services, please.";
+  const whatsappLinks = page.locator("a[href^='https://wa.me/447700323453']");
+  for (const link of await whatsappLinks.all()) {
+    const href = await link.getAttribute("href");
+    expect(new URL(href ?? "").searchParams.get("text")).toBe(defaultWhatsAppMessage);
+  }
 });
 
 test("fits mobile and desktop viewports without browser errors or an obscured footer", async ({
@@ -357,6 +365,49 @@ test("prevents the measured accessibility regressions", async ({ page }) => {
     const foreground = composite(parseCssColor(colors.foreground), background);
     expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
   }
+});
+
+test("keeps the reported visual sections compact and aligned", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await openLanding(page);
+
+  await expect(page.locator(".logo-mark").first()).toHaveCSS("overflow", "hidden");
+  await expect(page.locator("section[aria-labelledby='final-cta-title'] a").first()).toHaveCSS(
+    "color",
+    "rgb(250, 250, 248)",
+  );
+  const finalCall = page.locator("section[aria-labelledby='final-cta-title'] a").nth(1);
+  await expect(finalCall).toHaveCSS("color", "rgb(15, 23, 42)");
+  await expect(finalCall).toHaveCSS("background-color", "rgb(250, 250, 248)");
+  await expect(page.locator("section[aria-labelledby='benefits-title'] article").first()).toHaveCSS(
+    "min-height",
+    "auto",
+  );
+  await expect(page.locator("#services-rail")).toHaveCSS("align-items", "flex-start");
+
+  const heroCall = page.getByRole("link", { name: "Call Now", exact: true }).first();
+  await heroCall.hover();
+  await expect(heroCall).toHaveCSS("color", "rgb(15, 23, 42)");
+  await expect(heroCall).toHaveCSS("background-color", "rgb(250, 250, 248)");
+
+  const imageColumn = page.locator("#work > .container > div:first-child > div:last-child");
+  const imageColumnBox = await imageColumn.boundingBox();
+  const figures = page.locator("#work > .container > div:first-child > div:last-child figure");
+  const figureBoxes = await figures.evaluateAll((elements) =>
+    elements.map((element) => element.getBoundingClientRect().y),
+  );
+  expect(figureBoxes).toHaveLength(2);
+  expect(imageColumnBox).not.toBeNull();
+  expect(Math.abs(figureBoxes[0] - (imageColumnBox?.y ?? 0))).toBeLessThanOrEqual(1);
+  expect(Math.abs(figureBoxes[0] - figureBoxes[1])).toBeLessThanOrEqual(1);
+
+  const serviceImages = await page.locator("#services-rail article img").evaluateAll((images) =>
+    images.map((image) => image.getBoundingClientRect().height),
+  );
+  expect(Math.max(...serviceImages) - Math.min(...serviceImages)).toBeLessThanOrEqual(1);
+  await expect(page.locator("#services-rail").getByText("Service 01", { exact: true })).toHaveCount(0);
+  await expect(page.locator("#services-rail").getByText("Bath", { exact: true })).toHaveCount(0);
+  await expect(page.locator("section[aria-labelledby='benefits-title'] article svg")).toHaveCount(0);
 });
 
 test("serves the static hero video with byte ranges and correct HEAD semantics", async ({

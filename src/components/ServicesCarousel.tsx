@@ -174,7 +174,7 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
         <div
           id="services-rail"
           ref={railRef}
-          className="flex w-full snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain pb-3 pt-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex w-full items-start snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain pb-3 pt-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           tabIndex={0}
           role="region"
           aria-label="Service cards"
@@ -193,19 +193,16 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
                 data-service-card
                 className="group flex min-w-[calc(100%-1.5rem)] snap-start flex-col overflow-hidden rounded-[1.5rem] border border-[var(--warm-white)]/15 bg-[var(--warm-white)]/5 sm:min-w-[31rem] lg:min-w-[35rem]"
               >
-                <div className="relative overflow-hidden bg-[var(--stone)]">
+                <div className="relative aspect-[3/4] overflow-hidden bg-[var(--stone)]">
                   <Image
                     src={service.image}
                     alt={service.imageAlt}
                     width={service.width}
                     height={service.height}
                     sizes="(max-width: 639px) calc(100vw - 3.5rem), (max-width: 1279px) 31rem, 35rem"
-                    className="h-auto w-full"
+                    className="h-full w-full object-contain"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--navy)]/80 via-[var(--navy)]/10 to-transparent" aria-hidden="true" />
-                  <span className="absolute left-5 top-5 rounded-full border border-[var(--warm-white)]/30 bg-[var(--navy)]/60 px-3 py-1 text-[0.65rem] font-extrabold uppercase tracking-[0.14em] text-[var(--warm-white)]">
-                    Service {String(index + 1).padStart(2, "0")}
-                  </span>
                 </div>
 
                 <div className="flex flex-1 flex-col p-6 sm:p-7">
@@ -213,7 +210,6 @@ export function ServicesCarousel({ services }: ServicesCarouselProps) {
                     <div aria-hidden="true" className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--orange)] text-[var(--navy)]">
                       <Icon aria-hidden="true" size={20} strokeWidth={2} />
                     </div>
-                    <span className="pt-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--warm-white)]/50">{service.icon}</span>
                   </div>
                   <h3 className="mt-7 text-2xl font-extrabold leading-tight tracking-[-0.045em] text-[var(--warm-white)] sm:text-3xl">{service.title}</h3>
                   <p className="mt-4 max-w-lg text-sm leading-7 text-[var(--warm-white)]/70 sm:text-base">{service.description}</p>

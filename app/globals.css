@@ -88,10 +88,11 @@ a {
 .logo-mark {
   display: inline-flex;
   width: 10.5rem;
+  overflow: hidden;
   padding: 0.35rem;
   border: 1px solid var(--stone);
   border-radius: 999px;
-  background: var(--warm-white);
+  background: #fff;
   box-shadow: 0 0.35rem 1.25rem var(--stone);
 }
 
@@ -206,6 +207,38 @@ a {
 
 .button--orange:hover {
   background: var(--orange);
+}
+
+.button--navy {
+  background: var(--navy);
+  color: var(--warm-white);
+}
+
+.button--navy:hover {
+  background: var(--navy);
+  color: var(--warm-white);
+}
+
+.button--light {
+  background: var(--warm-white);
+  color: var(--navy);
+}
+
+.button--light:hover {
+  background: var(--warm-white);
+  color: var(--navy);
+}
+
+.button--ghost {
+  border-color: color-mix(in srgb, var(--warm-white) 35%, transparent);
+  background: transparent;
+  color: var(--warm-white);
+}
+
+.button--ghost:hover {
+  border-color: var(--warm-white);
+  background: var(--warm-white);
+  color: var(--navy);
 }
 
 .button--outline {
