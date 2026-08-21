@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Professional Silicone Sealing in Jersey | Silicone Solutions",
     description:
       "Professional silicone sealing across Jersey for homes and businesses. Clean workmanship, durable results and competitive pricing.",
-    images: ["/og-image.png"],
+    images: [{ url: "/og-image.png", alt: socialImageAlt }],
   },
 };
 
