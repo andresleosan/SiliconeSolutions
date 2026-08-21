@@ -332,11 +332,11 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
-  padding: 0.45rem;
-  border: 1px solid var(--warm-white);
+  padding: 0;
+  border: 0;
   border-radius: 1rem;
-  background: var(--navy);
-  box-shadow: 0 1rem 2.5rem var(--stone);
+  background: transparent;
+  box-shadow: none;
 }
 
 .mobile-contact-bar__action {
@@ -346,13 +346,13 @@ a {
   justify-content: center;
   gap: 0.5rem;
   border-radius: 0.7rem;
+  background: var(--navy);
   color: var(--warm-white);
   font-size: 0.78rem;
   font-weight: 800;
   transition: background-color 180ms ease, color 180ms ease;
 }
 
-.mobile-contact-bar__action:hover,
 .mobile-contact-bar__action--primary {
   background: var(--orange);
   color: var(--navy);

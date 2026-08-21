@@ -156,6 +156,39 @@ test("fits mobile and desktop viewports without browser errors or an obscured fo
     const contactBar = page.getByRole("navigation", { name: "Quick contact actions" });
     if (viewport.width === 390) {
       await expect(contactBar).toBeVisible();
+
+      const barStyles = await contactBar.evaluate((element) => {
+        const styles = getComputedStyle(element);
+        return {
+          backgroundColor: styles.backgroundColor,
+          borderWidth: styles.borderWidth,
+          borderStyle: styles.borderStyle,
+          boxShadow: styles.boxShadow,
+        };
+      });
+      expect(barStyles.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+      expect(barStyles.borderWidth).toBe("0px");
+      expect(barStyles.borderStyle).toBe("none");
+      expect(barStyles.boxShadow).toBe("none");
+
+      const whatsappStyles = await contactBar
+        .getByRole("link", { name: "WhatsApp", exact: true })
+        .evaluate((element) => {
+          const styles = getComputedStyle(element);
+          return { backgroundColor: styles.backgroundColor, color: styles.color };
+        });
+      expect(whatsappStyles.backgroundColor).toBe("rgb(15, 23, 42)");
+      expect(whatsappStyles.color).toBe("rgb(250, 250, 248)");
+
+      const callStyles = await contactBar
+        .getByRole("link", { name: "Call Now", exact: true })
+        .evaluate((element) => {
+          const styles = getComputedStyle(element);
+          return { backgroundColor: styles.backgroundColor, color: styles.color };
+        });
+      expect(callStyles.backgroundColor).toBe("rgb(249, 115, 22)");
+      expect(callStyles.color).toBe("rgb(15, 23, 42)");
+
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
       const footerBox = await page.locator("footer").boundingBox();
       const contactBarBox = await contactBar.boundingBox();
