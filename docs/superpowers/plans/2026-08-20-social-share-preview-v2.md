@@ -351,3 +351,71 @@ Expected: PASS with the transparent bar, navy WhatsApp button, orange Call Now b
 git add app/globals.css qa/tests/landing.spec.ts
 git commit -m "fix: simplify mobile contact bar"
 ```
+
+### Task 6: Adapt Before And After Labels To The Reveal Position
+
+**Files:**
+- Modify: `src/components/BeforeAfterSlider.tsx:102-120`.
+- Modify: `qa/tests/work-gallery-interactions.spec.ts` with reveal-position assertions.
+
+**Interfaces:**
+- Consumes: the existing `reveal` range state, keyboard control, and drag control.
+- Produces: conditional `After`/`Before` labels and a navy slider control without changing image order or accessibility descriptions.
+
+- [ ] **Step 1: Add the failing reveal-position test**
+
+In `qa/tests/work-gallery-interactions.spec.ts`, add a test that moves `#before-after-range` to the two boundary states and checks the visible labels and control colors:
+
+```ts
+test("hides the label on the narrow comparison side and uses the After color for the handle", async ({ page }) => {
+  await page.goto("/", { waitUntil: "load" });
+  const slider = page.locator("#before-after-range");
+  const comparison = page.locator("[data-comparison-enhanced]");
+  const handle = comparison.locator("[data-comparison-handle]");
+
+  await slider.press("Home");
+  for (let index = 0; index < 20; index += 1) await slider.press("ArrowRight");
+  await expect(comparison.locator("[data-comparison-after-label]")).toHaveCount(0);
+  await expect(comparison.locator("[data-comparison-before-label]")).toHaveCount(1);
+  await expect(handle).toHaveCSS("background-color", "rgb(15, 23, 42)");
+  await expect(handle).toHaveCSS("color", "rgb(250, 250, 248)");
+
+  await slider.press("End");
+  for (let index = 0; index < 20; index += 1) await slider.press("ArrowLeft");
+  await expect(comparison.locator("[data-comparison-after-label]")).toHaveCount(1);
+  await expect(comparison.locator("[data-comparison-before-label]")).toHaveCount(0);
+});
+```
+
+- [ ] **Step 2: Run the focused test to verify it fails**
+
+Run: `corepack pnpm run build`
+
+Run: `corepack pnpm exec playwright test qa/tests/work-gallery-interactions.spec.ts -g "hides the label"`
+
+Expected: FAIL because both labels currently remain rendered and the handle currently uses orange instead of navy.
+
+- [ ] **Step 3: Apply the minimal component change**
+
+In `src/components/BeforeAfterSlider.tsx`:
+
+- Render the `After` label only when `reveal >= 25` and add `data-comparison-after-label`.
+- Render the `Before` label only when `reveal <= 75` and add `data-comparison-before-label`.
+- Add `data-comparison-handle` to the circular handle.
+- Change the handle classes from orange background/navy text to navy background/warm-white text, retaining its warm-white border and arrow icon.
+- Keep `aria-describedby`, `aria-valuetext`, keyboard range semantics, image alt handling, and the no-JavaScript fallback unchanged.
+
+- [ ] **Step 4: Run the focused test to verify it passes**
+
+Run: `corepack pnpm run build`
+
+Run: `corepack pnpm exec playwright test qa/tests/work-gallery-interactions.spec.ts -g "hides the label"`
+
+Expected: PASS at `20%` and `80%`, with the correct label hidden and navy handle styles.
+
+- [ ] **Step 5: Commit the comparison task**
+
+```sh
+git add src/components/BeforeAfterSlider.tsx qa/tests/work-gallery-interactions.spec.ts
+git commit -m "fix: adapt comparison labels to reveal position"
+```
